@@ -1,0 +1,88 @@
+
+<html>
+  <head>
+   <title>Paint</title>
+   <link rel='stylesheet' type='text/css' href='/stylesheets/paintstyle.css'>
+    </head>
+  <body>
+    <h1 style="text-decoration:underline;"><b><i>PAINT</b></i></h1>
+    <form>
+      <fieldset id="patterns" style="border:solid; background-color:#000080;">
+	    <br><input id="pattern" type="button" onclick="curr_tool('line')" value="Line" /></br>
+	    <br><input id="pattern" type="button" onclick="curr_tool('box')" value="Box" /></br>
+	    <br><input id="pattern" type="button" onclick="curr_tool('circle')" value="Circle" /></br>
+	    <br><input id="pattern" type="button" onclick="curr_tool('pencil')" value="Pencil" /></br>
+	    <br><input id="pattern" type="button" onclick="curr_tool('eraser')" value="Eraser" /></br>
+	    <br><input id="pattern" type="button" onclick="clears()" value="Clear" /></br>
+	  </fieldset>
+    </form>
+    <canvas id="mycanvas" width="800" height="500" style=" background-color:#FFFFFF; z-index: 0"></canvas>
+	<canvas id="mytmpcanvas" width="800" height="500" style="z-index: 1"></canvas>
+	<form>
+	  <fieldset id="colorset" style="border:solid; background-color:#DCDCDC">
+	    <table>
+		   <tr>
+		     <td><input type="checkbox" id="fill" />Fill</td>
+			 <td><input type="button" id="color" title="Black" onclick="current_color('#000000')" style="background-color:#000000" /></td>
+			 <td><input type="button" id="color" title="Brown" onclick="current_color('#A52A2A')" style="background-color:#A52A2A" /></td>
+			 <td><input type="button" id="color" title="Dark Red" onclick="current_color('#8B0000')" style="background-color:#8B0000" /></td>
+			 <td><input type="button" id="color" title="Red" onclick="current_color('#FF0000')" style="background-color:#FF0000" /></td>
+			 <td><input type="button" id="color" title="Deep Pink" onclick="current_color('#FF1493')" style="background-color:#FF1493" /></td>
+			 <td><input type="button" id="color" title="Green" onclick="current_color('#008000')" style="background-color:#008000" /></td>
+			 <td><input type="button" id="color" title="Lime" onclick="current_color('#00FF00')" style="background-color:#00FF00" /></td>
+			 <td><input type="button" id="color" title="Orange" onclick="current_color('#FFA500')" style="background-color:#FFA500" /></td>
+			 <td><input type="button" id="color" title="Yellow" onclick="current_color('#FFFF00')" style="background-color:#FFFF00" /></td>
+			 <td><input type="button" id="color" title="Blue" onclick="current_color('#0000FF')" style="background-color:#0000FF" /></td>
+			 <td><input type="button" id="color" title="Aqua" onclick="current_color('#00FFFF')" style="background-color:#00FFFF" /></td>
+			 <td><input type="button" id="color" title="Sky Blue" onclick="current_color('#87CEEB')" style="background-color:#87CEEB" /></td>
+			 <td><input type="button" id="color" title="White" onclick="current_color('#FFFFFF')" style="background-color:#FFFFFF" /></td>
+		   </tr>
+		   <tr>
+		     <td><input type="checkbox" id="line" checked="checked" />Line</td>
+			 <td><input type="button" id="color" title="Dim Grey" onclick="current_color('#696969')" style="background-color:#696969" /></td>
+			 <td><input type="button" id="color" title="Grey" onclick="current_color('#808080')" style="background-color:#808080" /></td>
+			 <td><input type="button" id="color" title="Indian Red" onclick="current_color('#CD5C5C')" style="background-color:#CD5C5C" /></td>
+			 <td><input type="button" id="color" title="Dark Magenta" onclick="current_color('#8B008B')" style="background-color:#8B008B" /></td>
+			 <td><input type="button" id="color" title="Lawn Green" onclick="current_color('#7CFC00')" style="background-color:#7CFC00" /></td>
+			 <td><input type="button" id="color" title="Light Green" onclick="current_color('#90EE90')" style="background-color:#90EE90" /></td>
+			 <td><input type="button" id="color" title="Golden Rod" onclick="current_color('#DAA520')" style="background-color:#DAA520" /></td>
+			 <td><input type="button" id="color" title="Gold" onclick="current_color('#FFD700')" style="background-color:#FFD700" /></td>
+			 <td><input type="button" id="color" title="Indigo" onclick="current_color('#4B0082')" style="background-color:#4B0082" /></td>
+			 <td><input type="button" id="color" title="Light Sea Green" onclick="current_color('#20B2AA')" style="background-color:#20B2AA" /></td>
+			 <td><input type="button" id="color" title="Navy Blue" onclick="current_color('#000080')" style="background-color:#000080" /></td>
+			 <td><input type="button" id="color" title="Orchid" onclick="current_color('#DA70D6')" style="background-color:#DA70D6" /></td>
+			 <td><input type="button" id="color" title="Orange Red" onclick="current_color('#FF4500')" style="background-color:#FF4500" /></td>
+			 <td><label>Line Width</label>
+			   <select id="thick" onchange="thickness()">
+			     <option value="1" selected>1px</option>
+			     <option value="2">2px</option>
+				 <option value="4">4px</option>
+				 <option value="6">6px</option>
+				 <option value="8">8px</option>
+				 <option value="10">10px</option>
+				 <option value="14">14px</option>
+				 <option value="18">18px</option>
+				 <option value="24">24px</option>
+			   </select>
+			 </td>
+		   </tr>
+		 </table>
+      </fieldset>
+	</form>
+        <div id="save_files">
+	  <form>
+	    <input type="text" id="fname" style="cursor:text;" />
+		<input type="button" id="save_file" value="Save" onclick="save()" />
+	  </form>
+	  <br><a href="/"><b>New Paint</b></a></br>
+	</div>
+        <div id="saved_files" ><b><i>Saved Files</b></i><ul>
+          {% for name in py_all %}
+          <li><a href="#" class="paint_files">{{ name }}</a>
+          {% endfor %}
+        </ul></div>
+        <script src="http://code.jquery.com/jquery-1.8.3.js"></script>
+        <script>py_data = {{ py_str }};</script>
+        <script src="/script/paintscript.js"> </script>
+</body>
+</html>

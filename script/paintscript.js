@@ -231,7 +231,7 @@
       break;
     case 'eraser':
       var e_x=shape.er_x,e_y=shape.er_y;
-      ctx.clearRect(e_x,e_y,thick,thick);
+      ctx.clearRect(e_x,e_y,shape.thick,shape.thick);
       break;
     default:
       return;

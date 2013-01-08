@@ -12,7 +12,7 @@
       var tool = 'pencil';
       var color='#000000';
       var thick=1;
-      cvs_data = {"line": [], "pencil": [], "rectangle": [], "circle": [], "eraser": [] };
+      cvs_data = {"line": [], "pencil": [], "box": [], "circle": [], "eraser": [] };
       function curr_tool(selected){tool = selected;}
       
 	  function draw_type(){
@@ -33,7 +33,7 @@
       function clears(){
         ctx.clearRect(0, 0, can_width, can_height);
         tmp_ctx.clearRect(0, 0, can_width, can_height);
-        cvs_data = {"line": [], "pencil": [], "rectangle": [], "circle": [], "eraser": [] };
+        cvs_data = {"line": [], "pencil": [], "box": [], "circle": [], "eraser": [] };
       }
 	  
       function current_color(selected_color){
@@ -105,7 +105,7 @@
 	          tmp_ctx.fillStyle=color;
               tmp_ctx.fillRect(begin_x, begin_y, x-begin_x, y-begin_y);
 	        }
-            cvs_data.rectangle.push({"x": begin_x, "y": begin_y, "width": end_x-begin_x, "height": end_y-begin_y,
+            cvs_data.box.push({"x": begin_x, "y": begin_y, "width": end_x-begin_x, "height": end_y-begin_y,
                                  "thick": tmp_ctx.lineWidth, "stroke": stroke, "strk_clr": tmp_ctx.strokeStyle, 
                                  "fill": fill, "fill_clr": tmp_ctx.fillStyle });
             end_x=end_y=undefined;
@@ -177,7 +177,7 @@
   }
    
   function shape_draw(ctool, shape){
-    switch(ctool)
+    switch(ctool){
     case 'pencil':
       var bg_x = shape.x, bg_y = shape.y, x = shape.end_x, y = shape.end_y;
       ctx.lineWidth = shape.thick;
@@ -200,7 +200,7 @@
         ctx.stroke();
         ctx.closePath();
         break;
-    else if (ctool == 'rectangle'){
+    case 'box':
       var r_x = shape.x, r_y = shape.y, width = shape.width, height = shape.height, stroke = shape.stroke, fill = shape.fill;   
       ctx.beginPath();
       ctx.lineWidth = shape.thick;
@@ -213,8 +213,8 @@
         ctx.fillRect(r_x, r_y, width, height);
       }
       ctx.closePath();  
-    }
-    else if (ctool == 'circle'){   
+      break;
+    case 'circle':   
       var c_x = shape.x, c_y = shape.y, width = shape.radius, stroke = shape.stroke, fill = shape.fill;
       ctx.beginPath();
       ctx.lineWidth = shape.thick;
@@ -228,11 +228,14 @@
         ctx.fill();
       }
       ctx.closePath();  
-    }
-    else if(ctool=='eraser'){
+      break;
+    case 'eraser':
       var e_x=shape.er_x,e_y=shape.er_y;
       ctx.clearRect(e_x,e_y,thick,thick);
-    }
+      break;
+    default:
+      return;
+   }
   }
 
   function is_there(fname){
